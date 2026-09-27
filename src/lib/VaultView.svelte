@@ -2,6 +2,7 @@
   // Main screen: sidebar (folders/tags), searchable list, entry details.
   import { onMount } from "svelte";
   import { openUrl } from "@tauri-apps/plugin-opener";
+  import { getVersion } from "@tauri-apps/api/app";
   import { api, type Vault, type Entry, type Folder, type Settings } from "./api";
   import SettingsDialog from "./Settings.svelte";
 
@@ -21,6 +22,7 @@
   let now = $state(Date.now());
   let settings = $state<Settings>({ autoLockMins: 5, clipboardClearSecs: 20 });
   let settingsOpen = $state(false);
+  let version = $state("");
   let searchInput = $state<HTMLInputElement>();
 
   // $derived values recompute automatically when what they read changes.
@@ -143,6 +145,7 @@
 
   onMount(() => {
     api.getSettings().then((s) => (settings = s));
+    getVersion().then((v) => (version = v)); // from tauri.conf.json
     api.getVault().then((v) => {
       vault = v;
       sync(); // try to refresh; if offline we keep the local copy
@@ -201,6 +204,7 @@
       <div class="footer">
         <div class="muted" title={vault.server}>{vault.user}</div>
         <div class="muted">Synced {ago(vault.syncedAt)}</div>
+        {#if version}<div class="muted">ncpass v{version}</div>{/if}
         {#if syncError}<div class="error" title={syncError}>Offline: using local copy</div>{/if}
         <div class="row">
           <button onclick={sync} disabled={syncing}>{syncing ? "Syncing…" : "⟳ Sync"}</button>
