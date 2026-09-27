@@ -33,6 +33,7 @@ Full details: <https://tauri.app/start/prerequisites/>
 | `pnpm check` | Type-check the Svelte/TypeScript code |
 | `cd src-tauri && cargo test` | Run the Rust unit tests |
 | `cd src-tauri && cargo clippy` | Rust linter (catches common mistakes) |
+| `cd src-tauri && cargo test -- --ignored --nocapture` | Opt-in checks against the real server (`live`, needs `.env` loaded) and desktop clipboard (`clipboard`) |
 | `pnpm tauri build` | Build an installer for **the current OS** into `src-tauri/target/release/bundle/` |
 
 ## Building for each OS

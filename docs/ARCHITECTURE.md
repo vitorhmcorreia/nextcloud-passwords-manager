@@ -36,6 +36,7 @@ secret and asks for one password at a time (`reveal` / `copy`).
 | `src-tauri/src/lib.rs` | Builds the Tauri app: plugins, shared state, list of commands |
 | `src-tauri/src/api.rs` | Nextcloud Passwords API client; data types |
 | `src-tauri/src/vault.rs` | Key derivation, encryption and decryption of `vault.bin`; unit test |
+| `src-tauri/src/clipboard.rs` | Clipboard copy hidden from history + clear |
 | `src-tauri/src/commands.rs` | `status`, `setup`, `unlock`, `lock`, `reset`, `get_vault`, `reveal`, `copy`, `sync` |
 | `src-tauri/tauri.conf.json` | Window size, app id, CSP, bundle settings |
 | `src-tauri/capabilities/default.json` | Which Tauri permissions the UI has |
@@ -91,7 +92,9 @@ enabled on this account, so every field arrives as plain text over HTTPS.
 ## Security model and known limits
 
 - ✅ The data on disk is useless without the master password.
-- ✅ Copied secrets are wiped from the clipboard after 20 s (if still unchanged).
+- ✅ Copied values are flagged "don't keep in history" (KDE Klipper hint on Linux,
+  Win+V history on Windows, concealed type on macOS) and wiped after 20 s if unchanged.
+  See `src-tauri/src/clipboard.rs` for why the flag is also needed for clearing to work on KDE.
 - ✅ The UI only holds one revealed password at a time.
 - ✅ A strict CSP stops the web view from loading remote content.
 - ⚠️ The Nextcloud account password is stored inside the vault, because app passwords

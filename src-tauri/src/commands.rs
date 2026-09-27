@@ -3,6 +3,7 @@
 //! Secrets stay in Rust as much as possible: the list sent to the UI has no
 //! passwords; the UI asks for one explicitly with `reveal` or `copy`.
 
+use crate::clipboard::Clipboard;
 use crate::api::{Client, Credentials, Folder, Tag};
 use crate::vault::{self, Key, VaultData};
 use serde::Serialize;
@@ -10,7 +11,6 @@ use std::path::PathBuf;
 use std::sync::Mutex;
 use std::time::Duration;
 use tauri::{AppHandle, Manager, State};
-use tauri_plugin_clipboard_manager::ClipboardExt;
 
 /// Seconds before a copied secret is wiped from the clipboard.
 const CLIPBOARD_CLEAR_SECS: u64 = 20;
@@ -197,17 +197,17 @@ pub fn reveal(state: State<AppState>, id: String) -> Result<String, String> {
     field(&state, &id, "password")
 }
 
-/// Copy a field to the clipboard, then clear it after a delay
-/// (only if the clipboard still holds what we put there).
+/// Copy a field to the clipboard (hidden from clipboard history), then clear
+/// it after a delay if it's still there.
 #[tauri::command]
 pub fn copy(app: AppHandle, state: State<AppState>, id: String, which: String) -> Result<(), String> {
     let value = field(&state, &id, &which)?;
-    app.clipboard().write_text(value.clone()).map_err(|e| e.to_string())?;
+    app.state::<Clipboard>().set_secret(&value)?;
 
     tauri::async_runtime::spawn(async move {
         tokio::time::sleep(Duration::from_secs(CLIPBOARD_CLEAR_SECS)).await;
-        if app.clipboard().read_text().ok().as_deref() == Some(value.as_str()) {
-            let _ = app.clipboard().write_text(String::new());
+        if let Err(e) = app.state::<Clipboard>().clear_if(&value) {
+            eprintln!("clipboard clear failed: {e}");
         }
     });
     Ok(())
