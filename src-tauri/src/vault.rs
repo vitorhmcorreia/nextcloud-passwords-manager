@@ -138,3 +138,42 @@ mod tests {
         fs::remove_dir_all(dir).ok();
     }
 }
+
+/// End-to-end check against a real server: download, encrypt to disk, decrypt.
+/// Opt-in (needs network + credentials):
+///   set -a; . ../.env; set +a; cargo test live -- --ignored --nocapture
+#[cfg(test)]
+mod live {
+    use super::*;
+    use crate::api::Client;
+
+    #[tokio::test]
+    #[ignore]
+    async fn live_sync_roundtrip() {
+        let env = |k: &str| std::env::var(k).unwrap_or_else(|_| panic!("{k} not set"));
+        let credentials = Credentials {
+            server: env("NEXTCLOUD_INSTANCE"),
+            user: env("NEXTCLOUD_USER"),
+            password: env("NEXTCLOUD_PASSWORD"),
+        };
+        let snapshot = Client::new(credentials.clone()).unwrap().fetch_all().await.unwrap();
+
+        let path = std::env::temp_dir().join(format!("ncpass-live-{}.bin", std::process::id()));
+        let salt = new_salt();
+        let key = derive_key("test master", &salt).unwrap();
+        save(&path, &key, &salt, &VaultData { credentials, snapshot: Some(snapshot) }).unwrap();
+        let size = fs::metadata(&path).unwrap().len();
+
+        let back = load(&path, &key).unwrap().snapshot.unwrap();
+        fs::remove_file(&path).ok();
+        let with_pw = back.passwords.iter().filter(|p| !p.password.is_empty()).count();
+        println!(
+            "vault: {size} bytes | passwords: {} ({with_pw} with a secret) | folders: {} | tags: {} | tagged: {}",
+            back.passwords.len(),
+            back.folders.len(),
+            back.tags.len(),
+            back.passwords.iter().filter(|p| !p.tags.is_empty()).count(),
+        );
+        assert!(!back.passwords.is_empty());
+    }
+}
