@@ -27,6 +27,8 @@ export type Vault = {
   tags: Tag[];
 };
 
+export type Settings = { autoLockMins: number; clipboardClearSecs: number };
+
 export const api = {
   status: () => invoke<Status>("status"),
   setup: (server: string, user: string, password: string, master: string) =>
@@ -39,4 +41,6 @@ export const api = {
   copy: (id: string, which: "password" | "username" | "url") =>
     invoke<void>("copy", { id, which }),
   sync: () => invoke<number>("sync"),
+  getSettings: () => invoke<Settings>("get_settings"),
+  setSettings: (settings: Settings) => invoke<void>("set_settings", { settings }),
 };

@@ -111,7 +111,8 @@ Or let GitHub build all three: see [RELEASING.md](RELEASING.md).
 
 ## Where the data lives
 
-The encrypted vault is `vault.bin` in the app data directory:
+The encrypted vault is `vault.bin` in the app data directory. Next to it,
+`settings.json` holds the preferences (plain JSON, since nothing in it is secret):
 
 | OS | Path |
 |---|---|
@@ -119,4 +120,5 @@ The encrypted vault is `vault.bin` in the app data directory:
 | macOS | `~/Library/Application Support/website.vitorcorreia.ncpass/` |
 | Windows | `%APPDATA%\website.vitorcorreia.ncpass\` |
 
-Deleting it just means you set up again; nothing on the server is affected.
+Deleting `vault.bin` just means you set up again; nothing on the server is affected.
+Deleting `settings.json` resets the preferences to their defaults.

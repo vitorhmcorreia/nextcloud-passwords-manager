@@ -2,12 +2,12 @@
   // Main screen: sidebar (folders/tags), searchable list, entry details.
   import { onMount } from "svelte";
   import { openUrl } from "@tauri-apps/plugin-opener";
-  import { api, type Vault, type Entry, type Folder } from "./api";
+  import { api, type Vault, type Entry, type Folder, type Settings } from "./api";
+  import SettingsDialog from "./Settings.svelte";
 
   let { onLock }: { onLock: () => void } = $props();
 
   const ROOT = "00000000-0000-0000-0000-000000000000";
-  const IDLE_LOCK_MS = 5 * 60 * 1000;
 
   let vault = $state<Vault | null>(null);
   let search = $state("");
@@ -19,6 +19,8 @@
   let syncError = $state("");
   let toast = $state("");
   let now = $state(Date.now());
+  let settings = $state<Settings>({ autoLockMins: 5, clipboardClearSecs: 20 });
+  let settingsOpen = $state(false);
   let searchInput = $state<HTMLInputElement>();
 
   // $derived values recompute automatically when what they read changes.
@@ -83,7 +85,9 @@
   async function copy(which: "password" | "username" | "url") {
     if (!selected) return;
     await api.copy(selected.id, which);
-    flash(which === "password" ? "Password copied — clears in 20 s" : `${which} copied`);
+    flash(
+      which === "password" ? `Password copied — clears in ${settings.clipboardClearSecs} s` : `${which} copied`,
+    );
   }
 
   async function toggleReveal() {
@@ -114,6 +118,7 @@
    * the focus isn't in a text field, so normal text copying keeps working.
    */
   function onKeydown(ev: KeyboardEvent) {
+    if (settingsOpen) return; // the dialog handles its own keys
     const mod = ev.ctrlKey || ev.metaKey;
     const key = ev.key.toLowerCase();
     if (mod && key === "f") {
@@ -137,6 +142,7 @@
   }
 
   onMount(() => {
+    api.getSettings().then((s) => (settings = s));
     api.getVault().then((v) => {
       vault = v;
       sync(); // try to refresh; if offline we keep the local copy
@@ -149,7 +155,7 @@
     events.forEach((ev) => window.addEventListener(ev, bump));
     const timer = setInterval(() => {
       now = Date.now();
-      if (now - last > IDLE_LOCK_MS) onLock();
+      if (now - last > settings.autoLockMins * 60_000) onLock();
     }, 10_000);
 
     // Whatever onMount returns runs when the component goes away.
@@ -199,6 +205,7 @@
         <div class="row">
           <button onclick={sync} disabled={syncing}>{syncing ? "Syncing…" : "⟳ Sync"}</button>
           <button onclick={onLock} title="Ctrl+L">🔒 Lock</button>
+          <button onclick={() => (settingsOpen = true)} title="Settings" aria-label="Settings">⚙</button>
         </div>
       </div>
     </aside>
@@ -282,6 +289,17 @@
     </section>
   </div>
   {#if toast}<div class="toast">{toast}</div>{/if}
+  {#if settingsOpen}
+    <SettingsDialog
+      current={settings}
+      onSaved={(s) => {
+        settings = s;
+        settingsOpen = false;
+        flash("Settings saved");
+      }}
+      onClose={() => (settingsOpen = false)}
+    />
+  {/if}
 {/if}
 
 <style>

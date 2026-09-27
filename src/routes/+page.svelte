@@ -40,6 +40,8 @@
     --muted: #6b7280;
     --border: #dfe3ea;
     --accent: #0082c9; /* Nextcloud blue */
+    /* Lets the browser draw its own widgets (dropdown lists, scrollbars) dark too. */
+    color-scheme: light dark;
     --danger: #c62828;
     font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
     font-size: 14px;

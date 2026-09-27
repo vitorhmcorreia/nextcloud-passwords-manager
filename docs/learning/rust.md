@@ -68,6 +68,10 @@ because each language has its own naming convention.
 `#[serde(default)]` on a field (see `ApiPassword` in `api.rs`) means "if the JSON doesn't
 have it, use the default (empty string, `false`, 0…)". This makes parsing forgiving.
 
+**Defaults with serde**: `settings.rs` puts `#[serde(default)]` on the struct. When a
+field is missing from the JSON (say, a file written by an older version), serde fills
+it in from `impl Default for Settings` instead of failing.
+
 ## 4. Ownership and borrowing ⭐ (the core idea of Rust)
 
 Every value has exactly **one owner**. When the owner goes out of scope, the value is freed.
