@@ -11,7 +11,7 @@
 Our workflow (`.github/workflows/release.yml`) watches for tags that start with `v`.
 When you push one, GitHub starts three machines (Linux, macOS, Windows). Each builds the
 app from that tagged commit and uploads its installer to a **draft** release. A draft is
-only visible to you until you press *Publish* (the repo is private anyway).
+only visible to you until you press *Publish*.
 
 ## Versions
 
@@ -57,6 +57,4 @@ Fix it, then release a new patch version (e.g. `0.2.1`). Don't reuse a tag.
 
 ## Cost note
 
-The repo is private, so Actions minutes count against the free monthly quota
-(2,000 min on GitHub Free). macOS minutes count ×10. A full release uses roughly
-150–250 quota minutes, which is plenty for occasional releases.
+The repo is public, so GitHub Actions minutes are free (including macOS).
