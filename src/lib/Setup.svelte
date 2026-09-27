@@ -37,7 +37,12 @@
 
   <label>Nextcloud URL <input bind:value={server} required /></label>
   <label>User <input bind:value={user} required autocomplete="username" /></label>
-  <label>Nextcloud password <input type="password" bind:value={password} required /></label>
+  <label>Nextcloud app password <input type="password" bind:value={password} required /></label>
+  <p class="muted hint">
+    Use an app password rather than your main one: it can be revoked on its own and is required if you
+    use two-factor login. Create one in Nextcloud under
+    <strong>Personal settings → Security → Devices &amp; sessions</strong>.
+  </p>
 
   <hr />
   <p class="muted">
@@ -80,5 +85,9 @@
   .muted {
     color: var(--muted);
     margin: 0;
+  }
+  .hint {
+    font-size: 12px;
+    margin-top: -4px;
   }
 </style>
