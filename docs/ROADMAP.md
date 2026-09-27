@@ -9,7 +9,8 @@
 - [x] Reveal/copy with clipboard auto-clear
 - [x] Sync on unlock and on demand; works offline
 - [x] Auto-lock after 5 min idle
-- [ ] Try it on Linux, macOS 12 and Windows
+- [x] Tested on Linux (KDE Wayland), including clipboard clearing
+- [ ] Try it on macOS 12 and Windows
 
 ## Phase 1.5: polish
 
