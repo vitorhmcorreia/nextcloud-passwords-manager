@@ -25,6 +25,7 @@ own code. Read it next to the source files. Good external resources:
 | `zeroize` | wiping secrets from memory |
 
 `cargo add <crate>` adds one. `cargo build`, `cargo test`, `cargo clippy` do what they say.
+The full command reference, including cache cleaning, is in [DEVELOPMENT.md](../DEVELOPMENT.md#cargo-cheat-sheet).
 
 **Modules**: each `.rs` file is a module. `lib.rs` declares them:
 

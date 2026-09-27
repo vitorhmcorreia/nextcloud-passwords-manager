@@ -36,6 +36,68 @@ Full details: <https://tauri.app/start/prerequisites/>
 | `cd src-tauri && cargo test -- --ignored --nocapture` | Opt-in checks against the real server (`live`, needs `NEXTCLOUD_INSTANCE`, `NEXTCLOUD_USER`, `NEXTCLOUD_PASSWORD` env vars) and desktop clipboard (`clipboard`) |
 | `pnpm tauri build` | Build an installer for **the current OS** into `src-tauri/target/release/bundle/` |
 
+## Cargo cheat sheet
+
+Cargo is Rust's build tool and package manager. Run these inside `src-tauri/`,
+where `Cargo.toml` lives. For day-to-day app work, `pnpm tauri dev` and
+`pnpm tauri build` call Cargo for you; the commands below are for working on
+the Rust side directly.
+
+### Build and check
+
+| Command | What it does |
+|---|---|
+| `cargo check` | Type-checks without producing a binary. It's the fastest way to see compile errors, so use it often |
+| `cargo build` | Debug build into `target/debug/`. It compiles fast, but the result runs slowly |
+| `cargo build --release` | Optimized build into `target/release/`. Slower to compile, fast to run |
+| `cargo run` | Build and run the binary (for the app, prefer `pnpm tauri dev` so the UI is served too) |
+
+### Test and lint
+
+| Command | What it does |
+|---|---|
+| `cargo test` | Run all unit tests |
+| `cargo test vault` | Run only tests whose name contains `vault` |
+| `cargo test -- --nocapture` | Show `println!` output from tests (hidden by default) |
+| `cargo test -- --ignored` | Run only the `#[ignore]` tests (the live server and clipboard checks) |
+| `cargo clippy` | Linter with hundreds of checks for common mistakes and non-idiomatic code |
+| `cargo clippy --fix` | Apply clippy's suggested fixes automatically |
+| `cargo fmt` | Format all code in the standard style (`cargo fmt --check` only reports) |
+
+### Dependencies
+
+| Command | What it does |
+|---|---|
+| `cargo add serde --features derive` | Add a crate to `Cargo.toml` (use `cargo remove <crate>` to drop one) |
+| `cargo update` | Upgrade dependencies within the versions `Cargo.toml` allows; this rewrites `Cargo.lock` |
+| `cargo tree` | Show the dependency tree (`cargo tree -i <crate>` shows who pulls a crate in) |
+| `cargo doc --open` | Build HTML docs for this crate and all dependencies, then open them in the browser |
+
+### Cache and disk space
+
+Everything Cargo compiles goes into `src-tauri/target/`. That folder gets
+large (10+ GiB is normal for a Tauri app) and it is safe to delete, because it
+is fully rebuildable.
+
+| Command | What it does |
+|---|---|
+| `cargo clean` | Delete the whole `target/` folder. The next build is slow (a full rebuild) |
+| `cargo clean --release` | Delete only the release build output |
+| `cargo clean -p ncpass` | Delete only this crate's build output and keep the dependencies (the quick fix for odd stale-build errors) |
+
+When to clean: after renaming or moving the project folder, after a Rust
+toolchain update if builds act strangely, or to free disk space. The
+downloaded crate sources live separately in `~/.cargo/registry/` and are
+shared by all projects.
+
+### Toolchain (rustup)
+
+| Command | What it does |
+|---|---|
+| `rustup update` | Update Rust itself (compiler, cargo, clippy, rustfmt) |
+| `rustc --version` | Show the installed compiler version |
+| `rustup doc --book` | Open *The Rust Programming Language* book offline |
+
 ## Building for each OS
 
 Tauri can't cross-compile installers reliably, so each OS builds its own:
