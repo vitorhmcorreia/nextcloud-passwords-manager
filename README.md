@@ -18,6 +18,7 @@ Editing is planned for phase 2 (see [docs/ROADMAP.md](docs/ROADMAP.md)).
 |---|---|
 | [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md) | How the app is built, the vault file format, the security model |
 | [docs/DEVELOPMENT.md](docs/DEVELOPMENT.md) | Installing prerequisites, running, building installers |
+| [docs/RELEASING.md](docs/RELEASING.md) | Tags, releases, building installers for all OSes |
 | [docs/ROADMAP.md](docs/ROADMAP.md) | Phases and ideas |
 | [docs/learning/rust.md](docs/learning/rust.md) | Rust concepts, explained using this project's code |
 | [docs/learning/svelte.md](docs/learning/svelte.md) | Svelte + TypeScript concepts, explained using this project's code |

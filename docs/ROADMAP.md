@@ -14,7 +14,7 @@
 
 ## Phase 1.5: polish
 
-- [ ] GitHub Actions workflow that builds installers for all 3 OSes on each tag
+- [x] GitHub Actions workflow that builds installers for all 3 OSes on each tag
 - [ ] App icon
 - [ ] Keyboard shortcuts (Ctrl+F search, Ctrl+C copy password, Ctrl+L lock)
 - [ ] TOTP codes from custom fields (if used)

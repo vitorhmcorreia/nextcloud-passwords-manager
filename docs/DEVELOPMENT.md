@@ -45,7 +45,7 @@ Tauri can't cross-compile installers reliably, so each OS builds its own:
   The app isn't signed, so the first launch needs right-click → Open.
 - **Windows**: same command, makes `.msi` / `.exe`.
 
-A GitHub Actions workflow that builds all three automatically is on the roadmap.
+Or let GitHub build all three: see [RELEASING.md](RELEASING.md).
 
 ## Where the data lives
 
