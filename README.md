@@ -9,8 +9,9 @@ Runs on Linux, macOS 10.15+ and Windows 10/11.
 
 ## Status
 
-**Phase 1: read-only.** Sync, browse folders/tags, search, reveal/copy, auto-lock.
-Editing is planned for phase 2 (see [docs/ROADMAP.md](docs/ROADMAP.md)).
+**Read-only (phases 1 and 1.5 done).** Sync, browse folders/tags, search, reveal/copy,
+auto-lock, configurable timings, keyboard shortcuts (`Ctrl+F` search, `Ctrl+C` copy password,
+`Ctrl+L` lock; `Cmd` on macOS). Editing is planned for phase 2 (see [docs/ROADMAP.md](docs/ROADMAP.md)).
 
 ## Documentation
 
@@ -30,7 +31,8 @@ pnpm install
 pnpm tauri dev
 ```
 
-The first time the app starts, it asks for your Nextcloud URL, user and password, plus a
+The first time the app starts, it asks for your Nextcloud URL, user and an
+**app password** (Nextcloud: Personal settings → Security → Devices & sessions), plus a
 **master password** that encrypts the local copy. That master password cannot be recovered.
 
 ## Credits

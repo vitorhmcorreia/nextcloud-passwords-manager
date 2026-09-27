@@ -37,6 +37,7 @@ secret and asks for one password at a time (`reveal` / `copy`).
 | `src-tauri/src/api.rs` | Nextcloud Passwords API client; data types |
 | `src-tauri/src/vault.rs` | Key derivation, encryption and decryption of `vault.bin`; unit test |
 | `src-tauri/src/clipboard.rs` | Clipboard copy hidden from history + clear |
+| `src-tauri/src/settings.rs` | Preferences in `settings.json` (auto-lock, clipboard clear); `get_settings`, `set_settings`; unit tests |
 | `src-tauri/src/commands.rs` | `status`, `setup`, `unlock`, `lock`, `reset`, `get_vault`, `reveal`, `copy`, `sync` |
 | `src-tauri/tauri.conf.json` | Window size, app id, CSP, bundle settings |
 | `src-tauri/capabilities/default.json` | Which Tauri permissions the UI has |
@@ -44,7 +45,8 @@ secret and asks for one password at a time (`reveal` / `copy`).
 | `src/lib/api.ts` | TypeScript types and wrappers for each Rust command |
 | `src/lib/Setup.svelte` | First-run form |
 | `src/lib/Unlock.svelte` | Lock screen (and "forgot master password" reset) |
-| `src/lib/VaultView.svelte` | Sidebar, search, list, detail, sync, idle auto-lock |
+| `src/lib/VaultView.svelte` | Sidebar, search, list, detail, sync, idle auto-lock, keyboard shortcuts, version |
+| `src/lib/Settings.svelte` | Settings dialog |
 
 ## Flows
 
