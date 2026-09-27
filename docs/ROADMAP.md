@@ -15,9 +15,8 @@
 ## Phase 1.5: polish
 
 - [x] GitHub Actions workflow that builds installers for all 3 OSes on each tag
-- [ ] App icon
-- [ ] Keyboard shortcuts (Ctrl+F search, Ctrl+C copy password, Ctrl+L lock)
-- [ ] TOTP codes from custom fields (if used)
+- [x] App icon (source: `src-tauri/icons/source.svg`)
+- [x] Keyboard shortcuts (Ctrl+F search, Ctrl+C copy password, Ctrl+L lock, Esc clears search)
 - [ ] Settings: auto-lock time, clipboard clear time
 - [ ] Switch to a Nextcloud app password when available
 

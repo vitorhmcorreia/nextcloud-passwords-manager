@@ -19,6 +19,7 @@
   let syncError = $state("");
   let toast = $state("");
   let now = $state(Date.now());
+  let searchInput = $state<HTMLInputElement>();
 
   // $derived values recompute automatically when what they read changes.
   let tagsById = $derived(new Map((vault?.tags ?? []).map((t) => [t.id, t])));
@@ -107,6 +108,34 @@
     }
   }
 
+  /**
+   * Global shortcuts. Ctrl on Linux/Windows, Cmd (metaKey) on macOS.
+   * Ctrl+C only copies the password when nothing is selected on the page and
+   * the focus isn't in a text field, so normal text copying keeps working.
+   */
+  function onKeydown(ev: KeyboardEvent) {
+    const mod = ev.ctrlKey || ev.metaKey;
+    const key = ev.key.toLowerCase();
+    if (mod && key === "f") {
+      ev.preventDefault();
+      searchInput?.focus();
+      searchInput?.select();
+    } else if (mod && key === "l") {
+      ev.preventDefault();
+      onLock();
+    } else if (mod && key === "c") {
+      const typing = ev.target instanceof HTMLInputElement || ev.target instanceof HTMLTextAreaElement;
+      const hasSelection = (window.getSelection()?.toString() ?? "") !== "";
+      if (selected && !typing && !hasSelection) {
+        ev.preventDefault();
+        copy("password");
+      }
+    } else if (key === "escape" && document.activeElement === searchInput) {
+      search = "";
+      searchInput?.blur();
+    }
+  }
+
   onMount(() => {
     api.getVault().then((v) => {
       vault = v;
@@ -130,6 +159,8 @@
     };
   });
 </script>
+
+<svelte:window onkeydown={onKeydown} />
 
 {#if vault}
   <div class="layout">
@@ -167,13 +198,18 @@
         {#if syncError}<div class="error" title={syncError}>Offline: using local copy</div>{/if}
         <div class="row">
           <button onclick={sync} disabled={syncing}>{syncing ? "Syncing…" : "⟳ Sync"}</button>
-          <button onclick={onLock}>🔒 Lock</button>
+          <button onclick={onLock} title="Ctrl+L">🔒 Lock</button>
         </div>
       </div>
     </aside>
 
     <section class="list">
-      <input class="search" placeholder="Search {vault.entries.length} passwords…" bind:value={search} />
+      <input
+        class="search"
+        placeholder="Search {vault.entries.length} passwords…  (Ctrl+F)"
+        bind:this={searchInput}
+        bind:value={search}
+      />
       <div class="items">
         {#each visible as e (e.id)}
           <button class="item" class:active={e.id === selectedId} onclick={() => select(e.id)}>
@@ -200,7 +236,7 @@
           <dd>
             <code>{revealed ?? "••••••••••••"}</code>
             <button onclick={toggleReveal}>{revealed === null ? "Show" : "Hide"}</button>
-            <button class="primary" onclick={() => copy("password")}>Copy</button>
+            <button class="primary" onclick={() => copy("password")} title="Ctrl+C">Copy</button>
           </dd>
 
           {#if selected.url}

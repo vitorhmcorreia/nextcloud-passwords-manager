@@ -127,10 +127,28 @@ The project uses SvelteKit only for routing and building (`adapter-static`, SPA 
 `src/routes/+page.svelte` is the single page, `src/routes/+layout.ts` turns off server
 rendering, and `$lib` is an alias for `src/lib`.
 
+## 10. Window events and element refs
+
+The keyboard shortcuts in `VaultView.svelte` use two features.
+
+`<svelte:window onkeydown={onKeydown} />` attaches a listener to the whole window,
+so the shortcut works wherever the focus is. Svelte removes the listener when the
+component is destroyed, so there's no `removeEventListener` to write by hand
+(compare the manual cleanup in `onMount`).
+
+`bind:this={searchInput}` stores the real DOM element in a variable, so code can
+call `searchInput.focus()`. Declare it as `$state<HTMLInputElement>()`: it starts
+out `undefined` (hence `searchInput?.focus()`) and is filled once the element
+is mounted.
+
+`ev.preventDefault()` stops the browser's own action for that key, such as its
+built-in find bar on Ctrl+F. For Ctrl+C we only call it when nothing is selected,
+so normal text copying still works.
+
 ## Exercises
 
 1. Add a count next to each folder in the sidebar (hint: a `$derived` Map of folder → count).
-2. Press `Escape` to clear the search box (`onkeydown` on the input).
+2. Use ↑/↓ to move the selection through the list (extend `onKeydown`; `visible` has the order).
 3. Show the entry's URL domain in the list under the username.
 4. Make favorites sort first in the list.
 5. Add a "copy" button for custom fields (needs a new Rust command; see Rust exercise 2).
