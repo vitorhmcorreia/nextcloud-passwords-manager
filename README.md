@@ -42,3 +42,7 @@ on the commits.
 
 Thanks to [Marius Wieschollek](https://github.com/marius-wieschollek) for
 [Nextcloud Passwords](https://github.com/marius-wieschollek/passwords), whose API this app uses.
+
+## License
+
+[MIT](LICENSE) © 2026 Vítor Correia
