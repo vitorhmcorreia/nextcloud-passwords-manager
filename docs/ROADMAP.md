@@ -12,15 +12,15 @@
 - [x] Tested on Linux (KDE Wayland), including clipboard clearing
 - [x] Tested on macOS 12 and Windows (v0.1.2)
 
-## Phase 1.5: polish (current)
+## Phase 1.5: polish ✅
 
 - [x] GitHub Actions workflow that builds installers for all 3 OSes on each tag
 - [x] App icon (source: `src-tauri/icons/source.svg`)
 - [x] Keyboard shortcuts (Ctrl+F search, Ctrl+C copy password, Ctrl+L lock, Esc clears search)
 - [x] Settings: auto-lock time, clipboard clear time
-- [ ] Switch to a Nextcloud app password when available
+- [x] Use a Nextcloud app password (setup screen suggests one)
 
-## Phase 2: editing
+## Phase 2: editing (next)
 
 The API uses a `revision`/`hash` per item. Updates must send the current revision,
 which lets us detect conflicts.
