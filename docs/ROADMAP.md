@@ -1,6 +1,6 @@
 # Roadmap
 
-## Phase 1: read-only offline client ✅ (current)
+## Phase 1: read-only offline client ✅
 
 - [x] Connect with Nextcloud user/password
 - [x] Download passwords, folders, tags
@@ -8,11 +8,11 @@
 - [x] Folder tree, tags, favorites, search
 - [x] Reveal/copy with clipboard auto-clear
 - [x] Sync on unlock and on demand; works offline
-- [x] Auto-lock after 5 min idle
+- [x] Auto-lock when idle (5 min by default, configurable)
 - [x] Tested on Linux (KDE Wayland), including clipboard clearing
-- [ ] Try it on macOS 12 and Windows
+- [x] Tested on macOS 12 and Windows (v0.1.2)
 
-## Phase 1.5: polish
+## Phase 1.5: polish (current)
 
 - [x] GitHub Actions workflow that builds installers for all 3 OSes on each tag
 - [x] App icon (source: `src-tauri/icons/source.svg`)
