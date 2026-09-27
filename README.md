@@ -32,3 +32,13 @@ pnpm tauri dev
 
 The first time the app starts, it asks for your Nextcloud URL, user and password, plus a
 **master password** that encrypts the local copy. That master password cannot be recovered.
+
+## Credits
+
+Built by [Vítor Correia](https://github.com/vitorhmcorreia), pair-programming with
+[Claude Code](https://claude.com/claude-code) (Anthropic's Claude Opus 5.5), which wrote
+much of the code and the learning guides in `docs/learning/` and is credited as co-author
+on the commits.
+
+Thanks to [Marius Wieschollek](https://github.com/marius-wieschollek) for
+[Nextcloud Passwords](https://github.com/marius-wieschollek/passwords), whose API this app uses.
