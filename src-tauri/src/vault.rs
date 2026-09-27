@@ -141,7 +141,9 @@ mod tests {
 
 /// End-to-end check against a real server: download, encrypt to disk, decrypt.
 /// Opt-in (needs network + credentials):
-///   set -a; . ../.env; set +a; cargo test live -- --ignored --nocapture
+///   NEXTCLOUD_INSTANCE=https://… NEXTCLOUD_USER=… NEXTCLOUD_PASSWORD=… \
+///     cargo test live -- --ignored --nocapture
+/// (prefix the line with a space so the password stays out of shell history)
 #[cfg(test)]
 mod live {
     use super::*;
